@@ -17,17 +17,17 @@
 
 
 /**
- * This is a one-line short description of the file
+ * Skype Activity module for Moodle 2.x
+ * 
+ * Based on the Skype Activity Module by Amr Hourani a.hourani@gmail.com
  *
- * You can have a rather longer description of the file as well,
- * if you like, and it can span multiple lines.
  *
- * @package   mod_skype
- * @copyright 2011 Amr Hourani a.hourani@gmail.com
+ * @package   mod_skype_sga
+ * @copyright 2012 Matt Gleeson (mgleeson@studygroup.com) & David Webber (dwebber@studygroup.com) of Study Group Australia
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-/// Replace skype with the name of your module and remove this line
+
 
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/lib.php');
@@ -40,11 +40,11 @@ if (! $course = $DB->get_record('course', array('id' => $id))) {
 
 require_course_login($course);
 
-add_to_log($course->id, 'skype', 'view all', "index.php?id=$course->id", '');
+add_to_log($course->id, 'skype_sga', 'view all', "index.php?id=$course->id", '');
 
 /// Print the header
 
-$PAGE->set_url('/mod/skype/view.php', array('id' => $id));
+$PAGE->set_url('/mod/skype_sga/view.php', array('id' => $id));
 $PAGE->set_title($course->fullname);
 $PAGE->set_heading($course->shortname);
 
@@ -52,8 +52,8 @@ echo $OUTPUT->header();
 
 /// Get all the appropriate data
 
-if (! $skypes = get_all_instances_in_course('skype', $course)) {
-    echo $OUTPUT->heading(get_string('noskypes', 'skype'), 2);
+if (! $skype_sgas = get_all_instances_in_course('skype_sga', $course)) {
+    echo $OUTPUT->heading(get_string('noskype_sgas', 'skype_sga'), 2);
     echo $OUTPUT->continue_button("view.php?id=$course->id");
     echo $OUTPUT->footer();
     die();
@@ -77,23 +77,23 @@ if ($course->format == 'weeks') {
     $table->align = array ('left', 'left', 'left');
 }
 
-foreach ($skypes as $skype) {
-    if (!$skype->visible) {
+foreach ($skype_sgas as $skype_sga) {
+    if (!$skype_sga->visible) {
         //Show dimmed if the mod is hidden
-        $link = '<a class="dimmed" href="view.php?id='.$skype->coursemodule.'">'.format_string($skype->name).'</a>';
+        $link = '<a class="dimmed" href="view.php?id='.$skype_sga->coursemodule.'">'.format_string($skype_sga->name).'</a>';
     } else {
         //Show normal if the mod is visible
-        $link = '<a href="view.php?id='.$skype->coursemodule.'">'.format_string($skype->name).'</a>';
+        $link = '<a href="view.php?id='.$skype_sga->coursemodule.'">'.format_string($skype_sga->name).'</a>';
     }
 
     if ($course->format == 'weeks' or $course->format == 'topics') {
-        $table->data[] = array ($skype->section, $link);
+        $table->data[] = array ($skype_sga->section, $link);
     } else {
         $table->data[] = array ($link);
     }
 }
 
-echo $OUTPUT->heading(get_string('modulenameplural', 'skype'), 2);
+echo $OUTPUT->heading(get_string('modulenameplural', 'skype_sga'), 2);
 print_table($table);
 
 /// Finish the page
